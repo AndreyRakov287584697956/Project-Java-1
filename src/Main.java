@@ -1,3 +1,6 @@
+import java.util.Objects;
+import java.util.Scanner;
+
 class Employee{
     private static int count = 0;
     private String name;
@@ -32,6 +35,7 @@ class Employee{
 class EmployeeBook{
     private int employeeCount;
     private Employee[]employees;
+    private Scanner scanner = new Scanner(System.in);
     public EmployeeBook(int employeeCount){
         this.employees = new Employee[employeeCount];
         employeeCount = 0;
@@ -39,6 +43,7 @@ class EmployeeBook{
     public void printAllEmployees(){
         for(Employee i: employees){
             if (i != null){
+                System.out.println("------------------------------");
                 System.out.println("Ф. И. О. - " + i.getName());
                 System.out.println("Отдел - " + i.getDepartment());
                 System.out.println("Зарплата - " + i.getSalary());
@@ -60,6 +65,12 @@ class EmployeeBook{
     public void minSalary(){
         Employee employee = employees[0];
         for (Employee i: employees){
+            if (i != null){
+                employee = i;
+                break;
+            }
+        }
+        for (Employee i: employees){
             if (i != null && employee.getSalary() > i.getSalary()){
                 employee = i;
             }
@@ -69,11 +80,17 @@ class EmployeeBook{
     public void maxSalary(){
         Employee employee = employees[0];
         for (Employee i: employees){
+            if (i != null){
+                employee = i;
+                break;
+            }
+        }
+        for (Employee i: employees){
             if (i != null && employee.getSalary() < i.getSalary()){
                 employee = i;
             }
         }
-        System.out.println("Сотрудник с максимальной зарплатой - " + employee.getName());
+        System.out.println("Сотрудник с минимальной зарплатой - " + employee.getName());
     }
     public void allEmployeesAvgSalary(){
         int sum = 0;
@@ -97,6 +114,12 @@ class EmployeeBook{
     public void minSalaryDepartment(int a){
         Employee employee = employees[0];
         for (Employee i: employees){
+            if (i != null){
+                employee = i;
+                break;
+            }
+        }
+        for (Employee i: employees){
             if (i != null && employee.getSalary() > i.getSalary() && i.getDepartment() == a){
                 employee = i;
             }
@@ -105,6 +128,12 @@ class EmployeeBook{
     }
     public void maxSalaryDepartment(int a){
         Employee employee = employees[0];
+        for (Employee i: employees){
+            if (i != null){
+                employee = i;
+                break;
+            }
+        }
         for (Employee i: employees){
             if (i != null && employee.getSalary() < i.getSalary() && i.getDepartment() == a){
                 employee = i;
@@ -135,6 +164,7 @@ class EmployeeBook{
     public void printAllEmployeesDepartment(int a){
         for(Employee i: employees){
             if (i != null && i.getDepartment() == a){
+                System.out.println("------------------------------");
                 System.out.println("Ф. И. О. - " + i.getName());
                 System.out.println("Зарплата - " + i.getSalary());
                 System.out.println("ИД - " + i.getId());
@@ -184,6 +214,62 @@ class EmployeeBook{
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] == null){
                 employees[i] = new Employee(name, department, salary);
+                System.out.println("Сотрудник добавлен!");
+                return;
+            }
+        }
+    }
+    public void deleteEmployee(String name){
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && Objects.equals(name, employees[i].getName())){
+                employees[i] = null;
+                System.out.println("Сотрудник уволен!");
+                return;
+            }
+        }
+    }
+    public void deleteEmployee(int id){
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && id == employees[i].getId()){
+                employees[i] = null;
+                System.out.println("Сотрудник уволен!");
+                return;
+            }
+        }
+    }
+    public void editEmployeeSalary(String name){
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && Objects.equals(name, employees[i].getName())){
+                System.out.println("Изменение данных сотрудника - " + name + ".");
+                System.out.print("Введите новую зарплату: ");
+                int inputSalary = scanner.nextInt();
+                employees[i].setSalary(inputSalary);
+                System.out.println("Успешно изменена зарплата!");
+                return;
+            }
+        }
+    }
+    public void editEmployeeDepartment(String name){
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && Objects.equals(name, employees[i].getName())){
+                System.out.println("Изменение данных сотрудника - " + name + ".");
+                System.out.print("Введите новый отдел: ");
+                int inputDepartment = scanner.nextInt();
+                if (inputDepartment < 6){
+                    employees[i].setDepartment(inputDepartment);
+                }
+                System.out.println("Успешно изменён отдел!");
+                return;
+            }
+        }
+    }
+    public void printEmployeesDepartment(){
+        for (int i = 1; i < 6; i ++){
+            System.out.println("Отдел " + i + ":");
+            for (Employee j: employees){
+                if (j != null && j.getDepartment() == i){
+                    System.out.println("Ф. И. О. - " + j.getName());
+                }
             }
         }
     }
@@ -194,6 +280,12 @@ public class Main {
 //    employeeBook.employees[0] = new Employee("Иванов Иван Иванович", 1, 50000);
 //    employees[1] = new Employee("Петров Алексей Васильевич", 2, 70000);
 //    employees[2] = new Employee("Уткин Александр Игоревич", 2, 40000);
+    employeeBook.addEmployee("Петров Алексей Васильевич", 2, 70000);
+    employeeBook.addEmployee("Иванов Иван Иванович", 1, 50000);
+    employeeBook.addEmployee("Уткин Александр Игоревич", 2, 80000);
+    employeeBook.printEmployeesDepartment();
+    employeeBook.deleteEmployee("Иванов Иван Иванович");
+    employeeBook.deleteEmployee(0);
     employeeBook.printAllEmployees();
     employeeBook.allEmployeesSalary();
     employeeBook.minSalary();
@@ -208,5 +300,8 @@ public class Main {
     employeeBook.printAllEmployeesDepartment(2);
     employeeBook.printEmployeesLessThanSalary(30000);
     employeeBook.printEmployeesMoreThanSalary(50000);
+    employeeBook.editEmployeeSalary("Уткин Александр Игоревич");
+    employeeBook.editEmployeeDepartment("Уткин Александр Игоревич");
+    employeeBook.printAllEmployees();
     }
 }
